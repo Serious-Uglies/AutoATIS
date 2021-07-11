@@ -18,7 +18,7 @@ local json           = require('json')
 
 --## MAIN TABLE
 AutoATIS             = {}
-
+UglyStartAtis = {}
 -----------------------------------------------------------------------------------------
 -- Format of injected data
 --[[
@@ -248,9 +248,9 @@ AutoATIS.startMapAfterMoose = function (argument, time)
     else
         trigger.action.outText("Moose is loaded - Starting AutoATIS", 5)
         logger.info("Moose is loaded - Starting AutoATIS")
-        logger.info(lfs.writedir() .. "Scripts/inject/AutoATIS/Atis Soundfiles/")
+--        logger.info(lfs.writedir() .. "Scripts/inject/AutoATIS/Atis Soundfiles/")
 
-        ATIS:SetSoundfilesPath(lfs.writedir() .. "Scripts/inject/AutoATIS/Atis Soundfiles/")
+--        ATIS:SetSoundfilesPath(lfs.writedir() .. "Scripts/inject/AutoATIS/Atis Soundfiles/")
 
         AutoATIS.injectAtisToMap()
 
