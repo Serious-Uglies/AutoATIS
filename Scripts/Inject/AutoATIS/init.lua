@@ -98,10 +98,12 @@ local AutoAtisConf = {}
 
 -- add atis to airport
 AutoATIS.AddAtis = function (_name, _atisConf)  
-    local newAtis=ATIS:New(_name, _atisConf["ATISFreq"])
-    newAtis:SetRadioRelayUnitName("ATIS " .. _name)
-    newAtis:SetTowerFrequencies({_atisConf["TowerFreqA"], _atisConf["TowerFreqB"]})
+    local newAtis=ATIS:New(_name, _atisConf["ATISFreq"], radio.modulation.AM)
+--    newAtis:SetRadioRelayUnitName("ATIS " .. _name)
+--    newAtis:SetTowerFrequencies({_atisConf["TowerFreqA"], _atisConf["TowerFreqB"]})
     newAtis:SetImperialUnits()
+    newAtis:SetSRS("C:\\DCS_DATA\\SRS\\", "male", "en-US")
+    newAtis:SetQueueUpdateTime(45)
     if _atisConf["Tacan"] ~= "" then
         newAtis:SetTACAN(_atisConf["Tacan"])
     end
@@ -210,13 +212,13 @@ AutoATIS.injectAtisToMap = function ()
                 if AutoAtisConf[airbaseMap[i]:getName()] ~= nil then
                     logger.info("UGLY: Adding object to airfield: " .. airbaseMap[i]:getName())
 
-                    local GroupObject = GROUP:FindByName( "ATIS " .. airbaseMap[i]:getName() )
+--[[                local GroupObject = GROUP:FindByName( "ATIS " .. airbaseMap[i]:getName() )
                     if GroupObject == nil then
                         AutoATIS.CreateAtisObjectForAirbase(airbaseMap[i]:getName(), coalitions[k])
                     else
                         logger.info("UGLY: Group exists - reusing: " .. airbaseMap[i]:getName())
                     end
-                    
+]]--                    
                     AutoATIS.AddAtis(airbaseMap[i]:getName(), AutoAtisConf[airbaseMap[i]:getName()])
                 else
                     logger.info("UGLY: No frequencies for: " .. airbaseMap[i]:getName())
@@ -246,6 +248,10 @@ AutoATIS.startMapAfterMoose = function (argument, time)
     else
         trigger.action.outText("Moose is loaded - Starting AutoATIS", 5)
         logger.info("Moose is loaded - Starting AutoATIS")
+        logger.info(lfs.writedir() .. "Scripts/inject/AutoATIS/Atis Soundfiles/")
+
+        ATIS:SetSoundfilesPath(lfs.writedir() .. "Scripts/inject/AutoATIS/Atis Soundfiles/")
+
         AutoATIS.injectAtisToMap()
 
         return 0
